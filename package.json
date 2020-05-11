@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx @11ty/eleventy",
-    "deploy": "gh-pages -d docs",
+    "deploy": "npm run build && gh-pages -d docs -b master",
     "start": "npx @11ty/eleventy --serve"
   },
   "repository": {
