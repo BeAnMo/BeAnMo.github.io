@@ -2,21 +2,24 @@ const base = require("./base-html");
 const jumboTron = require("./jumbotron");
 const PostBody = require("./post-body");
 
-const Posts = ({ posts }) => `
-${posts.map(
-  ({ title, date, snippet, url }) => `
+const Posts = ({ posts }) =>
+  posts
+    .sort((a, b) => b.date - a.date)
+    .map(
+      ({ title, date, snippet, url }) => `
     <hr />
     ${PostBody({
       title: `<a href="${url}">${title}</a>`,
       date,
-      content: snippet,
+      content: `<p class="post-body">${snippet}<p>`,
       inContainer: true,
-    })}
-`
-)}`;
+    })}`
+    )
+    .join("\n");
 
 module.exports = function ({ content, title, subtitle, collections }) {
   return base.call(this, {
+    title: 'Benjamin Morin',
     body: `
       ${jumboTron({ title, subtitle })}
       <main class="container">

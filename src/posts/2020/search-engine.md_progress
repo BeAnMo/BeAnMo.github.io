@@ -1,0 +1,37 @@
+---
+layout: post.11ty.js
+title: Building a Small Search Engine
+date: 2020-10-03
+tags: post
+snippet: For myself, two of the main attractions of programming are organizing & understanding complex data and having the ability to build my own tools.
+---
+
+<div class="post-body">
+For myself, two of the main attractions of programming are organizing & understanding complex data and having the ability to build my own tools. The latter fills me with all sort of pride and joy when I build something that I can actually use in the real world. You know what kind of project satisfies both of those, a search engine. 
+
+A search engine is no small task, after all Google built its empire on its search capabilities. However, setting up a small one is not a massive endeavor and can yield a lot interesting insights.
+
+There's a single basic requirement for a search engine: *retrieve documents based on a query*. What's a document? A document could be anything really, but it needs to contain something that can be queried for. What's query? Some kind of pattern or question that the search engine can match/ask of the documents it contains.
+
+Here's a simple take on this idea (in JavaScript) -
+
+```js
+function engine(docs){
+    return word => docs.filter(({ text }) => text.includes(word));
+}
+
+const query = engine([
+    {
+        text: 'The quick brown fox jumped over the lazy dog.'
+    },
+    {
+        text: 'The lazy dog outfoxxed the jumpy fox and got dinner first.'
+    }
+]);
+
+query('lazy'); // -> [{ text: 'The lazy dog outfoxxed the jumpy fox and got dinner first.' }]
+```
+
+That's pretty easy and works in a wide variety of scenarios. There's a couple issues though. For starters, if a user was looking for "fox," the query returns both documents. 
+</div>
+

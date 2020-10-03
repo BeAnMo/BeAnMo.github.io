@@ -1,6 +1,5 @@
-const JumboTron = ({ title, subtitle }) => `<header class="jumbo">
+const JumboTron = ({ title }) => `<header class="navbar">
     <h1>${title}</h1>
-    <p>${subtitle}</p>
 </header>`;
 
 module.exports = JumboTron;

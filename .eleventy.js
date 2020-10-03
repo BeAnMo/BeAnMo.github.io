@@ -4,7 +4,7 @@ const htmlmin = require("html-minifier");
 module.exports = function (config) {
   config.setBrowserSyncConfig({
     browser: null,
-    port: 8080,
+    port: 4080,
   });
 
   config.addPassthroughCopy("assets");
