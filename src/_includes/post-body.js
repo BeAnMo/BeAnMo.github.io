@@ -1,8 +1,8 @@
 const PostBody = ({ title, date, content, inContainer = false }) => `
 <article class="${inContainer ? "" : "content"}">
   <header>
-    <h3 style="margin-bottom: 0;">${title}</h3>
-    <h6 style="margin-top: 0;" class="lt-text">${date.toDateString()}</h6>
+    <h1 style="margin-bottom: 0;">${title}</h1>
+    <h5 style="margin-top: 0;" class="lt-text">${date.toDateString()}</h5>
   </header>
 
   <section>

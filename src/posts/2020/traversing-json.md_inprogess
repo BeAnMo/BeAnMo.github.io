@@ -1,0 +1,175 @@
+---
+layout: post.11ty.js
+title: Traversing JSON
+date: 2020-10-07
+tags: post
+snippet: BLANK
+---
+
+<div class="post-body">
+
+Given the ubiquity of <a href="https://www.json.org/" target="_blank" rel="noopener">JavaScript Object Notation</a> on the internet and beyond, one should have an understanding of dealing with arbitrarily nested data. Web developers get the <a href="https://www.json.org/" target="_blank" rel="noopener">Document Object Model</a>, which turns boring HTML text into a living object that can be traversed and manipulated. However, there is not an standard equivalent for JSON. Luckily, JSON is far easier to deal with the raw HTML and with some basic procedures, can be transformed at the programmers whim.
+
+### Don't Just Curse, _Recurse_
+
+JSON is self-referential, which means it defines itself in part by referring to itself. A brief description of valid JSON is:
+
+```js
+JSON is one of:
+- null
+- boolean
+- number
+- string
+- Object
+- Array
+```
+
+Notice there are 4 primitive\* types of data and 2 compound ones. If there's JSON that contains an array, what's in the array? JSON, of course. Likewise, each object key points to more JSON. So a slightly fuller description is:
+
+```js
+JSON is one of:
+- null
+- boolean
+- number
+- string
+- Object of:
+    - string: JSON
+- Array of:
+    - JSON
+```
+
+Each one of those values (however nested) are valid JSON.
+
+How can this knowledge used to an advantage? When traversing JSON, if one of the primitive data types are encountered, they can be handled immediately. If a string is encountered, do something with it. When designing a recursive algorithm, this can be used as a base case.
+
+```js
+function traverse(json){
+    if(isString(json)){
+        return true;
+    } else {
+        return next(json);
+    }
+}
+```
+
+Halfway there, kind of. The function `next` is some hypothetical way to advance to the next JSON element. How would that be determined though? If each array and object ultimately reduces to 1 of the 4 primitive types, then there is a need to traverse both structures.
+
+To start, it is a good idea to know whether JSON is an object or an array, so two predicate functions will be introduced to simplify things:
+
+```js
+function isArray(json) {
+  return Array.isArray(json);
+}
+
+function isObject(item) {
+  return typeof item === "object" && item !== null && !isArray(item);
+}
+```
+
+Nice and easy, but these will reduce some of the clutter. How about traversing a JSON array? JS has no shortage of ways to do that:
+
+```js
+function traverseArray(arr) {
+  let results = [];
+
+  for (const item of arr) {
+    results.push(traverse(item));
+  }
+
+  return results;
+}
+```
+It simply maps `traverse` to each element in the array. `traverse` was never completed but leaving that as is for now allows abstracting away independent traversals. For the time being, the assumption is that `traverse` will return something, its details are not important yet. How about object traversals? Basically the same thing:
+
+```js
+function traverseObject(obj) {
+  let results = [];
+
+  for (const key of Object.keys(obj)) {
+    results.push(traverse(obj[key]));
+  }
+
+  return results;
+}
+```
+
+Revisiting `traverse` now allows all the pieces to be assembled. 
+
+```js
+function traverse(json){
+    if(isArray(json)){
+        return traverseArray(json);
+    } else if(isObject(json)){
+        return traverseObject(json);
+    } else {
+        if(isString(json)){
+            return 'found a string';
+        } else {
+            return null;
+        }
+    }
+}
+```
+
+Passing in some test data:
+
+```js
+const data = {
+  id: 123,
+  records: [
+    {
+      sub_id: 3
+    },
+    {
+      sub_id: 4,
+      name: 'whut?'
+    }
+  ]
+};
+```
+
+Would return:
+
+```js
+[
+  null,
+  [
+    [
+      null
+    ],
+    [
+      null,
+      "found a string"
+    ]
+  ]
+]
+```
+
+That's not exciting. But it does show a very basic mapping process utilizing a depth first approach.
+
+---
+
+Ideas:
+
+- recursion
+  - needed to traverse arbitraliy nested objects/arrays
+  - mutual recursion for handling objects in arrays & arrays in objects
+- depth first
+  - pros:
+    - easy to do with mutal recursion/generators
+  - cons:
+    - performance relative to breadth first
+- breadth first
+  - pros:
+    - performance
+  - cons:
+    - have to rely on queue, increases the complexity
+- generators/streams
+  - pros:
+    - easy to do/drastically simplify code
+    - lazy evaluation
+  - cons:
+    - don't play well with Babel/questionable support on older browsers
+    - performance hit over loops
+- data processing - grouping on specific keys/levels - filtering ("pruning") - mapping over specific keys
+</div>
