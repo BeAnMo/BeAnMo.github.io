@@ -36,7 +36,11 @@
 }
 
 .post-body {
-  line-height: 2rem;
+  line-height: 2.2rem;
+}
+
+.post-body > h2 {
+  margin-top: 2.5rem;
 }
 
 @media only screen and (max-width: 400px) {
