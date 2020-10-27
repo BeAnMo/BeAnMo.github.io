@@ -1,0 +1,12 @@
+- extend `useApiState` example
+- explain redux middleware signature
+  - `store => next => action`
+  - store is current store state
+  - next is next middleware in the middleware chain (think `nextDispatch`)
+  - action is the current action
+  - using `store.dispatch` to dispatch will send new action through entire middleware chain
+  - `next` will only dispatch action to next middleware
+- example middleware
+  - logging
+  - caching
+  - paging

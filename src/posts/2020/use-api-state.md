@@ -57,10 +57,14 @@ const ActivityTable = ({ rows }) => {
 };
 ```
 
-The text input to grab a username. (For text inputs, listening to the "change" event prevents the `onChange` prop from firing with every key press. This prevents spamming Reddit with half-finished usernames).
+The text input to grab a username.
 
 ```js
 const UserForm = ({ value, onChange, disabled }) => {
+  // For text inputs, listening to the "change" event
+  // prevents the `onChange` prop from firing with
+  // every key press. This prevents spamming Reddit
+  // with half-finished usernames.
   const $input = useRef();
 
   useEffect(() => {
@@ -79,6 +83,10 @@ Bringing it all together.
 
 ```js
 const RecentActivity = () => {
+  // The `user` is not necessary with an uncontrolled text input,
+  // so there's no need to store it with `useState`, but for
+  // demo purposes assume that `user` has a role beyond what is
+  // shown.
   const [user, setUser] = useState("");
 
   const handleUser = (e) => setUser(e.target.value);
@@ -93,7 +101,7 @@ const RecentActivity = () => {
 };
 ```
 
-Great, if `RecentActivity` is basically done, now it just needs the data source. How about adding the Reddit user service?
+Great, `RecentActivity` is basically done, now it just needs the data source. How about adding the Reddit user service?
 
 ```js
 const redditUrl = (pathname) => {
@@ -122,9 +130,11 @@ const fetchUser = (user) => {
 };
 ```
 
+Nothing crazy. It's just taking a few fields from response data and doing some simple formatting.
+
 <h2 id="fetch-1">Version 1</h2>
 
-Nothing crazy. It's just taking a few fields from response data and doing some simple formatting. Now to add the fetching to the `RecentActivity` component.
+Now to add the data fetching to the `RecentActivity` component.
 
 ```js
 const RecentActivity = () => {
@@ -132,10 +142,9 @@ const RecentActivity = () => {
   const [rows, setRows] = useState([]);
 
   const handleChange = (e) => {
-    const user = e.target.value;
+    setUser(e.target.value);
 
     if (user !== "") {
-      setUser(e.target.value);
       fetchUser(e.target.value).then(setRows).catch(console.error);
     }
   };
@@ -194,9 +203,37 @@ const RecentActivity = () => {
 
 Now any issues syncing data between the input and table are resolved. If a user has been entered, the table display can only be the error/loading indicators or the user's activity table. It looks simple enough in this example, but data fetching components can get very complex very quickly.
 
-The `handleChange` function tips off where this component is headed when additional functionality gets tacked on. In order to ensure no data gets mixed up between users and to ensure data will render properly, the `loading`, `error`, and `stats` state values need to be reset manually with each new user.
+The `handleChange` function tips off where this component is headed when additional functionality gets tacked on. In order to ensure no data gets mixed up between users and to ensure data will render properly, the `loading`, `error`, and `rows` state values need to be reset manually with each new user.
 
 Error and loading states are important but how they are updated is not the component's concern. By managing it locally, not only does it bleed into other logic, but it costs rerenders; each `set...` call triggers a rerender, totalling 6 per `handleChange` call. If `ActivityTable` contained very busy and/or many child components, extra renders can sabotage performance.
+
+While extra renders can be eliminated through a single `useState` instance that holds `{ error, loading, rows }`, it doesn't eliminate maintaining extra state.
+
+```js
+const RecentActivity = () => {
+  const [user, setUser] = useState("");
+  const [{ error, loading, rows }, setState] = useState({
+    error: null,
+    loading: false,
+    rows: [],
+  });
+
+  const handleChange = (user) => {
+    setUser(user);
+
+    if (user !== "") {
+      setState((prev) => ({ error: null, loading: true, rows: [] }));
+      fetch(user)
+        .then((rows) => setState((prev) => ({ ...prev, loading: false, rows })))
+        .catch((error) =>
+          setState((prev) => ({ ...prev, loading: false, error }))
+        );
+    }
+  };
+
+  // ...render
+};
+```
 
 There are plenty of solutions for handling data fetching in components. Luckily, React's `useReducer` hook provides a solid foundation for a more concise pattern for fetching.
 
@@ -232,14 +269,14 @@ const reducer = (state, action) => {
 
     case FAILURE:
       return {
-        ...state,
+        data: null,
         loading: false,
         error: action.error,
       };
 
     case SUCCESS:
       return {
-        ...state,
+        error: null,
         loading: false,
         data: action.data,
       };
@@ -278,8 +315,9 @@ const RecentActivity = () => {
   const [{ error, loading, data }, getRecentActivity] = useApiState(fetchUser);
 
   const handleChange = (user) => {
+    setUser(user);
+
     if (user !== "") {
-      setUser(user);
       getRecentActivity(user);
     }
   };
@@ -332,7 +370,7 @@ The final piece is in place. The mess of state handling in `handleChange` gets p
 
 Here's the live version, with some test data as opposed to Reddit API calls.
 
-<iframe src="https://stackblitz.com/edit/use-api-state?embed=1&file=src/RecentActivity.v3.jsx" style="height: 550px; width: 100%;"></iframe>
+<iframe loading="lazy" src="https://stackblitz.com/edit/use-api-state?embed=1&file=src/RecentActivity.v3.jsx" style="height: 550px; width: 100%;"></iframe>
 
 ### Addendum
 

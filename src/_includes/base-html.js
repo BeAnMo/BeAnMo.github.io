@@ -32,7 +32,12 @@ a:hover { color: #00A19C }
 a:active { color:#F98E2C  }
 a:visited { color: #CE112D }`;
 
-const base = function ({ head = "", body = "", title = "" }) {
+const base = function ({
+  head = "",
+  body = "",
+  title = "",
+  includeHomeLink = false,
+}) {
   return `<!DOCTYPE html>
   <html lang="en">
       <head>
@@ -70,8 +75,11 @@ const base = function ({ head = "", body = "", title = "" }) {
           ${body}
 
           <footer class="container" style="height: 4rem;">
-              <div class="content" style="display: flex; justify-content: flex-end;">
-                <h5>&copy; 2020 Benjamin Morin</h5>
+              <div class="content" style="display: flex; justify-content: space-between; align-items: baseline;">
+                ${includeHomeLink ? '<a href="/">Back Home</a>' : ""}
+                <h5 style="${
+                  includeHomeLink ? "align-self: flex-end; " : ""
+                }">&copy; ${new Date().getFullYear()} Benjamin Morin</h5>
               </div>
           </footer>
       </body>

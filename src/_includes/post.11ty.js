@@ -11,5 +11,6 @@ module.exports = function ({ title, content, date }) {
         ${PostBody({ title, date, content })}
       </main>
       `,
+    includeHomeLink: true,
   });
 };
