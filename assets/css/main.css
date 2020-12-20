@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  border-bottom: 8px solid #55c1e8;
+  border-bottom: 1px solid #55c1e8;
   padding: 0 2rem;
 }
 
@@ -23,6 +23,34 @@
   font-weight: 700;
 }
 
+.flex {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-baseline {
+  align-items: baseline;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -31,7 +59,7 @@
 }
 
 .content {
-  width: 60%;
+  width: 50%;
   margin: 0;
 }
 
@@ -44,7 +72,12 @@
 }
 
 .post-body > h2 {
-  margin-top: 2.5rem;
+  margin-top: 4rem;
+}
+
+.sidebar {
+  width: 30%;
+  margin: 0 1rem; 
 }
 
 @media only screen and (max-width: 600px) {
@@ -56,16 +89,15 @@
     line-height: 1.8rem;
   }
 
-  .content {
-    width: calc(100% - 2rem);
+  .content, .sidebar {
+    flex: 1 calc(100% - 2rem);
     margin: 0 1rem;
   }
 }
 
 hr {
   border: 0;
-  height: 3px;
-  background: #55c1e8;
+  border-bottom: 1px solid  #55c1e8;
 }
 
 .navbar {
@@ -76,7 +108,7 @@ hr {
   padding: 0 1rem;
   background-color: #fbfbfb;
   color: #002f6d;
-  border-bottom: 8px solid #55c1e8;
+  border-bottom: 1px solid #55c1e8;
 }
 
 .github {
