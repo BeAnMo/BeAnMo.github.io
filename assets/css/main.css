@@ -27,10 +27,6 @@
   display: flex;
 }
 
-.flex-wrap {
-  flex-wrap: wrap;
-}
-
 .flex-row {
   flex-direction: row;
 }
@@ -75,11 +71,6 @@
   margin-top: 4rem;
 }
 
-.sidebar {
-  width: 30%;
-  margin: 0 1rem; 
-}
-
 @media only screen and (max-width: 600px) {
   body {
     font-size: 1rem;
@@ -89,8 +80,8 @@
     line-height: 1.8rem;
   }
 
-  .content, .sidebar {
-    flex: 1 calc(100% - 2rem);
+  .content {
+    width: calc(100% - 2rem);
     margin: 0 1rem;
   }
 }
