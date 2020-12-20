@@ -1,7 +1,7 @@
 ---
 layout: post.11ty.js
 title: Getting Started
-date: 2020-05-10
+date: 2020-09-25
 tags: post
 snippet: So much to do and so little time
 ---

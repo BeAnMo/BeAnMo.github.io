@@ -15,20 +15,20 @@ const COLORS = (exports.COLORS = {
 const STYLE = `body {
   margin: 0;
   padding: 0;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  font-family:  Merriweather, serif;
+  font-family:  IBM Plex Serif, serif;
   background-color: #fbfbfb;
   color: #444;
 }
 
-h1,h2,h3,h4,h5,h6 { font-family: Montserrat,  -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; margin: 1rem 0; }
+h1,h2,h3,h4,h5,h6 { font-family: IBM Plex Sans,  -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; margin: 1rem 0; }
 p { margin: 1rem 0;}
 pre { background-color: #eee; padding: 0.5rem; width: 100%; overflow: auto; line-height: 1rem; }
-code { font-family: Source Code Pro,monospace; color: #00A19C; }
+code { font-family: IBM Plex Mono,monospace; color: #00A19C; }
 
 a { color: #0083C1; }
-a:hover { color: #00A19C }
+a:hover { color: #00A19C; text-decoration-thickness: 3px; }
 a:active { color:#F98E2C  }
 a:visited { color: #CE112D }`;
 
@@ -48,7 +48,7 @@ const base = function ({
 
           ${head}
 
-          <link href="https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat:wght@500&family=Source+Code+Pro&display=swap" rel="stylesheet"> 
+          <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500&family=IBM+Plex+Sans:wght@700&family=IBM+Plex+Mono&display=swap" rel="stylesheet"> 
           <link rel="stylesheet" 
             href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
       
@@ -75,11 +75,11 @@ const base = function ({
           ${body}
 
           <footer class="container" style="height: 4rem;">
-              <div class="content" style="display: flex; justify-content: space-between; align-items: baseline;">
+              <div class="content" style="display: flex; justify-content: ${
+                includeHomeLink ? "space-between" : "flex-end"
+              }; align-items: baseline;">
                 ${includeHomeLink ? '<a href="/">Back Home</a>' : ""}
-                <h5 style="${
-                  includeHomeLink ? "align-self: flex-end; " : ""
-                }">&copy; ${new Date().getFullYear()} Benjamin Morin</h5>
+                <h5>&copy; ${new Date().getFullYear()} Benjamin Morin</h5>
               </div>
           </footer>
       </body>

@@ -4,9 +4,7 @@ title: Benjamin Morin
 subtitle: Software Engineer
 ---
 
-### About Me
-
----
+# Benjamin Morin
 
 <div class="post-body" id="about-me">
 I like to build, digitally, and I taught myself how to program so I could do more. I'm always looking for another challenge, if you've know of one or just want to chat, send me an <a href="mailto:bamorin00@gmail.com" target="_blank" rel="noopener">email</a>.
